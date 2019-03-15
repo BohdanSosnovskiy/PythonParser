@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import sqlite3
 from sqlite3 import Error
+import os.path
 
 class Job(object):
     Title = ""
@@ -41,7 +42,6 @@ def create_connection(db_file):
     """ create a database connection to a SQLite database """
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
     except Error as e:
         print(e)
     finally:
@@ -81,7 +81,7 @@ def clear_table():
     conn = sqlite3.connect("siteWorkNest.db")
     cursor = conn.cursor()
 
-    sql = "DELETE FROM Jobs"
+    sql = "delete from Jobs"
     cursor.execute(sql)
 
 def view_vacance(selCity):
@@ -125,9 +125,17 @@ def main():
                     else:
                         if choice == '5' or choice == 5:
                             ements = get_items(get_html('https://www.work-nest.com/jobs/'))
-                            clear_table()
-                            for i in ements:
-                                add_row(i.Title,i.City,i.Offer,i.About_project)
+
+                            if os.path.exists('siteWorkNest.db'):
+                                clear_table()
+                                for i in ements:
+                                    add_row(i.Title,i.City,i.Offer,i.About_project)
+                            else:
+                                create_connection('siteWorkNest.db')
+                                sql_base()
+                                for i in ements:
+                                    add_row(i.Title,i.City,i.Offer,i.About_project)
+
 
         choice = input('Exit [y/n]: ')
         if choice == 'y':
