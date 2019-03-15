@@ -134,17 +134,5 @@ def main():
             isWork = False
         pass
 
-
-    #ements = get_items(get_html('https://www.work-nest.com/jobs/'))
-    #clear_table()
-    #for i in ements:
-    #    print('Job: ' + i.Title)
-    #    print('City: ' + i.City)
-    #    print('We are ready to offer: ' + i.Offer)
-    #    print('About the project: ' + i.About_project)
-    #    add_row(i.Title,i.City,i.Offer,i.About_project)
-    #view_base()
-
-
 if __name__ == '__main__':
     main()
