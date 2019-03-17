@@ -83,6 +83,7 @@ def clear_table():
 
     sql = "delete from Jobs"
     cursor.execute(sql)
+    conn.commit()
 
 def view_vacance(selCity):
     ements = get_items(get_html('https://www.work-nest.com/jobs/'))
