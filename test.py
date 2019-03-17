@@ -30,10 +30,10 @@ def get_items(html):
         obj_job.City = name.find('div',class_='opening-info-item-details').get_text()
 
         obj_job.Offer = name.find('div',class_='col-md-auto').find('ul').get_text()
-        try:
-            obj_job.About_project = name.find('div',class_='col-md-auto').find('p').get_text()
-        except Exception as e:
-            obj_job.About_project = ''
+
+        p = name.find('div',class_='col-md-auto').find('p')
+        if p:
+            obj_job.About_project = p.get_text()
 
         names.append(obj_job)
     return names
