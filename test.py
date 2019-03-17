@@ -16,7 +16,7 @@ def get_html(url):
 
 #parse all vacancy
 def get_items(html):
-    soup = BeautifulSoup(html, 'lxml')
+    soup = BeautifulSoup(html, 'html.parser')
 
     ement = soup.find_all('section', class_='opening-section-2') #find all tags witg name 'section' and class 'opening-section-2'
 
