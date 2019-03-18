@@ -19,6 +19,7 @@ class Job:
             'create table vacancy '
             '(title text, city text, offer text, about text);'
         )
+        
     def parse(self, careers_url, view=None):
         r = requests.get(careers_url)
         soup = BeautifulSoup(r.text, 'html.parser')
