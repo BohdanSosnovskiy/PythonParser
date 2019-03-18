@@ -28,7 +28,15 @@ class Job:
         for name in elements:
             title = name.find('h3',class_='section-title').get_text()
 
+<<<<<<< HEAD
             city = name.find('div',class_='opening-info-item-details').get_text()
+=======
+        obj_job.Offer = name.find('div',class_='col-md-auto').find('ul').get_text()
+
+        p = name.find('div',class_='col-md-auto').find('p')
+        if p:
+            obj_job.About_project = p.get_text()
+>>>>>>> e7dba88426117a995ac8c538ffea5d310a1e7498
 
             offer = name.find('div',class_='col-md-auto').find('ul').get_text()
 
