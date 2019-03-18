@@ -4,11 +4,14 @@ import sqlite3
 from sqlite3 import Error
 import os.path
 
-class Job(object):
+class Job:
     Title = ""
     City = ""
     Offer = ""
     About_project = ""
+
+DB_NAME = 'parser.db'
+LINK = 'https://www.work-nest.com/jobs/'
 
 def get_html(url):
     r = requests.get(url)
@@ -38,17 +41,8 @@ def get_items(html):
         names.append(obj_job)
     return names
 
-def create_connection(db_file):
-    """ create a database connection to a SQLite database """
-    try:
-        conn = sqlite3.connect(db_file)
-    except Error as e:
-        print(e)
-    finally:
-        conn.close()
-
 def sql_base():
-    conn = sqlite3.connect("siteWorkNest.db") # или :memory: чтобы сохранить в RAM
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
     # Создание таблицы
@@ -58,7 +52,7 @@ def sql_base():
                    """)
 
 def add_row(title,city,offer,about):
-    conn = sqlite3.connect("siteWorkNest.db") # или :memory: чтобы сохранить в RAM
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     query = "INSERT INTO Jobs VALUES ('" + title + "', '" + city + "', '" + offer + "', '" + about + "')"
 
@@ -68,17 +62,8 @@ def add_row(title,city,offer,about):
     # Сохраняем изменения
     conn.commit()
 
-def view_base():
-    conn = sqlite3.connect("siteWorkNest.db")
-    #conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-
-    sql = "SELECT * FROM Jobs"
-    cursor.execute(sql)
-    print(cursor.fetchall()) # or use fetchone()
-
 def clear_table():
-    conn = sqlite3.connect("siteWorkNest.db")
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
     sql = "delete from Jobs"
@@ -86,7 +71,7 @@ def clear_table():
     conn.commit()
 
 def view_vacance(selCity):
-    ements = get_items(get_html('https://www.work-nest.com/jobs/'))
+    ements = get_items(get_html(LINK))
     if selCity == 'all':
         for i in ements:
             print('Job: ' + i.Title)
@@ -125,14 +110,13 @@ def main():
                         view_vacance('Remote')
                     else:
                         if choice == '5' or choice == 5:
-                            ements = get_items(get_html('https://www.work-nest.com/jobs/'))
+                            ements = get_items(get_html(LINK))
 
-                            if os.path.exists('siteWorkNest.db'):
+                            if os.path.exists(DB_NAME):
                                 clear_table()
                                 for i in ements:
                                     add_row(i.Title,i.City,i.Offer,i.About_project)
                             else:
-                                create_connection('siteWorkNest.db')
                                 sql_base()
                                 for i in ements:
                                     add_row(i.Title,i.City,i.Offer,i.About_project)
