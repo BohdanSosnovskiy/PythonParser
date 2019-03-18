@@ -19,7 +19,7 @@ class Job:
             'create table vacancy '
             '(title text, city text, offer text, about text);'
         )
-    def parse(self, careers_url):
+    def parse(self, careers_url, view=None):
         r = requests.get(careers_url)
         soup = BeautifulSoup(r.text, 'html.parser')
 
@@ -37,6 +37,14 @@ class Job:
                 about = p.get_text()
             else:
                 about = ''
+
+            if ((view is not None) and (view == True)):
+                print('Title: ' + title)
+                print('City: ' + city)
+                print('Offer: ' + offer)
+                print('About: ' + about)
+                print('_______________________________________________________')
+
             c = self.conn.cursor()
             c.execute(
                 'insert into vacancy (title, city, offer, about) '
@@ -47,7 +55,7 @@ class Job:
 
 def main():
     job = Job(db_name=DB_NAME)
-    job.parse(careers_url=LINK)
+    job.parse(careers_url=LINK,view=True)
 
 if __name__ == '__main__':
     main()
