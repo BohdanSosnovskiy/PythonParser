@@ -23,7 +23,7 @@ class Parser:
             '(title text, city text, offer text, about text);'
         )
 
-    def parse(self, careers_url, view = False, filter_city = None):
+    def parse(self, careers_url, view=False, filter_city=None):
         r = requests.get(careers_url)
         soup = BeautifulSoup(r.text, 'html.parser')
 
@@ -31,13 +31,21 @@ class Parser:
 
         for name in elements:
             if filter_city is None:
-                title = name.find('h3',class_='section-title').get_text()
+                title = name.find('h3',
+                                  class_='section-title'
+                                  ).get_text()
 
-                city = name.find('div',class_='opening-info-item-details').get_text()
+                city = name.find('div',
+                                 class_='opening-info-item-details'
+                                 ).get_text()
 
-                offer = name.find('div',class_='col-md-auto').find('ul').get_text()
+                offer = name.find('div',
+                                  class_='col-md-auto'
+                                  ).find('ul').get_text()
 
-                p = name.find('div',class_='col-md-auto').find('p')
+                p = name.find('div',
+                              class_='col-md-auto'
+                              ).find('p')
                 if p:
                     about = p.get_text()
                 else:
@@ -48,7 +56,7 @@ class Parser:
                     print('City: ' + city)
                     print('Offer: ' + offer)
                     print('About: ' + about)
-                    print('_______________________________________________________')
+                    print('______________________________________________')
 
                 c = self.conn.cursor()
                 c.execute(
@@ -57,17 +65,27 @@ class Parser:
                     (title, city, offer, about)
                 )
             else:
-                temp = name.find('div',class_='opening-info-item-details').get_text()
+                temp = name.find('div',
+                                 class_='opening-info-item-details'
+                                 ).get_text()
 
                 if temp.find(filter_city) > -1:
 
-                    title = name.find('h3',class_='section-title').get_text()
+                    title = name.find('h3',
+                                      class_='section-title'
+                                      ).get_text()
 
-                    city = name.find('div',class_='opening-info-item-details').get_text()
+                    city = name.find('div',
+                                     class_='opening-info-item-details'
+                                     ).get_text()
 
-                    offer = name.find('div',class_='col-md-auto').find('ul').get_text()
+                    offer = name.find('div',
+                                      class_='col-md-auto'
+                                      ).find('ul').get_text()
 
-                    p = name.find('div',class_='col-md-auto').find('p')
+                    p = name.find('div',
+                                  class_='col-md-auto'
+                                  ).find('p')
                     if p:
                         about = p.get_text()
                     else:
@@ -78,7 +96,7 @@ class Parser:
                         print('City: ' + city)
                         print('Offer: ' + offer)
                         print('About: ' + about)
-                        print('_______________________________________________________')
+                        print('______________________________________________')
 
                     c = self.conn.cursor()
                     c.execute(
@@ -87,6 +105,7 @@ class Parser:
                         (title, city, offer, about)
                     )
             self.conn.commit()
+
 
 def main():
 
@@ -101,8 +120,9 @@ def main():
     elif len(sys.argv) == 2 and (sys.argv[1] != '--print'):
         sel_city = sys.argv[1]
 
-    job = Parser(db_name = DB_NAME)
-    job.parse(careers_url = LINK, view = is_view, filter_city = sel_city)
+    job = Parser(db_name=DB_NAME)
+    job.parse(careers_url=LINK, view=is_view, filter_city=sel_city)
+
 
 if __name__ == '__main__':
     main()
