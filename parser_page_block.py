@@ -2,6 +2,7 @@ import sys
 import random
 import time
 import os.path
+import requests
 import urllib.request
 
 
@@ -14,12 +15,14 @@ class ReturnPage:
 
     def __init__(self):
         size = 0
+        session = requests.Session()
         while size < 6000:
             fp = urllib.request.urlopen(LINK)
             mybytes = fp.read()
 
             mystr = mybytes.decode("utf8")
             fp.close()
+
             size = len(mystr)
             if os.path.exists(FILE_NAME):
                 os.remove(FILE_NAME)
@@ -30,8 +33,20 @@ class ReturnPage:
                     except:
                         g = ''
             r = random.randint(1, 60)
+            if size < 6000:
+                response = session.get(LINK)
+                print('Part page')
+                print('Headers:')
+                print(fp.headers)
+                print(session.cookies.get_dict())
+            else:
+                response = session.get(LINK)
+                print('Full page')
+                print('Headers:')
+                print(fp.headers)
+                print(session.cookies.get_dict())
             print(size)
-            time.sleep(r)
+
 
 def main():
     page = ReturnPage()
