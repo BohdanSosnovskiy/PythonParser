@@ -24,6 +24,7 @@ class ReturnPage:
                     'User-Agent': USER_AGENT
                 }
             )
+            print('load page')
             fp = urllib.request.urlopen(req)
             mybytes = fp.read()
 
